@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Board</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        .actions { margin-bottom: 20px; }
+        .job-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .job-table th, .job-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        .job-table th { background-color: #f2f2f2; }
+        .message { padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<h1>🏢 Job Board Listings</h1>
+
+<div th:if="${message}" class="message" th:text="${message}"></div>
+
+<!-- ✅ SHOW ONLY TO COMPANY & ADMIN -->
+<div class="actions" sec:authorize="hasAnyRole('COMPANY','ADMIN')">
+    <a th:href="@{/jobs/new}">Post New Job</a> |
+    <a th:href="@{/companies/new}">Add New Company</a>
+</div>
+
+<table class="job-table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Company</th>
+        <th>Location</th>
+        <th>Min Salary</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="job : ${jobs}">
+        <td th:text="${job.title}"></td>
+        <td th:text="${job.company.name}"></td>
+        <td th:text="${job.location}"></td>
+        <td th:text="${#numbers.formatCurrency(job.salaryMin)}"></td>
+        <td th:text="${job.description}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${jobs.empty}" style="margin-top: 20px;">
+    <p>No jobs found. Start by adding a company and then posting a job!</p>
+</div>
+
+</body>
+</html>

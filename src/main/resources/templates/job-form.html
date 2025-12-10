@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Job</title>
+</head>
+<body>
+
+<h2>Post New Job</h2>
+
+<form th:action="@{/jobs/save}" th:object="${job}" method="post">
+
+    <label>Title:</label>
+    <input type="text" th:field="*{title}" required><br><br>
+
+    <label>Description:</label>
+    <textarea th:field="*{description}"></textarea><br><br>
+
+    <label>Minimum Salary:</label>
+    <input type="number" th:field="*{salaryMin}"><br><br>
+
+    <label>Location:</label>
+    <input type="text" th:field="*{location}" required><br><br>
+
+    <!-- 🔥 FIXED COMPANY DROPDOWN -->
+    <label>Company:</label>
+    <select th:field="*{company.id}" required>
+        <option value="">-- Select Company --</option>
+        <option th:each="c : ${companies}"
+                th:value="${c.id}"
+                th:text="${c.name}">
+        </option>
+    </select>
+    <br><br>
+
+    <button type="submit">Post Job</button>
+</form>
+
+</body>
+</html>
